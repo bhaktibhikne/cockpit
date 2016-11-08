@@ -3436,6 +3436,51 @@ function PageNetworkBondSettings() {
     this._init();
 }
 
+function update_button() {
+            var mode_description = cockpit.dbus('com.redhat.network-interface', { superuser: true });
+
+            function set_status(text) {
+                if (text != popover.attr('data-content')) {
+                    popover.attr('data-content', text);
+                    // Refresh the popover if it is open
+                    if (popover.data('bs.popover').tip().hasClass('in'))
+                        popover.popover('show');
+                }
+            }
+
+            poll(bond_mode_choices)
+                .done(function (balance-rr,active-backup,balance-xor,broadcast,802.3ad,balance-tlb,balance-alb) {
+                    var status;
+
+                    if (state == "balance-rr")
+                        status = _("Transmit packets in sequential order from the first available slave through the last. This mode provides load 				balancing and fault tolerance");
+                    else if (state == "active-backup")
+                        status = _("Only one slave in the bond is active This mode provides fault tolerance. ");
+                    else if (state == "balance-xor")
+                        status = _("Transmit based on the selected transmit hash policy. This mode provides load balancing and fault tolerance.");
+                    else if (state == "broadcast")
+                        status = _("Transmits everything on all slave interfaces. This mode provides fault tolerance.");
+                    else if(state == "802.3ad")
+                        status = _("Creates aggregation groups that share the same speed and duplex settings.");
+ 		    else if(state == "balance-tlb")
+                        status = _("Channel bonding that does not require any special switch support.");
+                   else 
+                        status = _("Includes balance-tlb plus receive load balancing (rlb) for IPV4 traffic, and does not require any special switch 				support. ");
+
+                   // button.text(state == "running"? active : "none");
+                   // button.prop('disabled', state == "not-installed");
+                   // button.toggleClass('disabled', state == "not-installed");
+                    set_status(status);
+                })
+                .fail(function (ex) {
+                    console.warn("failed to poll modes", ex);
+                    button.text("error");
+                    button.prop('disabled', true);
+                    button.toggleClass('disabled', true);
+                    set_status(_("Communication with modes has failed"));
+                });
+}
+
 PageNetworkTeamSettings.prototype = {
     _init: function () {
         this.id = "network-team-settings-dialog";
