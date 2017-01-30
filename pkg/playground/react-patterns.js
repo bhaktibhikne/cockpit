@@ -30,6 +30,7 @@
     var demoDialog = require("./react-demo-dialog.jsx");
     var demoListing = require("./react-demo-listing.jsx");
     var demoTooltip = require("./react-demo-tooltip.jsx");
+    var demoAddport     = require("./react-demo-dialog.jsx");
 
     var _ = cockpit.gettext;
 
@@ -116,7 +117,7 @@
     document.addEventListener("DOMContentLoaded", function() {
         document.getElementById('demo-show-dialog').addEventListener("click", onStandardDemoClicked.bind(null, null), false);
         document.getElementById('demo-show-error-dialog').addEventListener("click", onStandardDemoClicked.bind(null, 'Some static error'), false);
-
+        document.getElementById('demo-add-port').addEventListener("click", onStandardDemoClicked.bind(null, null), false);
         /*-----------------------------------------------------------------------------
           Listing Pattern
           -----------------------------------------------------------------------------
